@@ -2,20 +2,25 @@ import styled from "styled-components";
 import logo from "../assets/images/logo.png";
 import { Divider, Form, Label } from 'semantic-ui-react'
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+
 
 function Register(){
     const [error, setError] = useState(false);
+    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    console.log(errors);
+    const onSubmit = data => console.log(data);
 
     return(
         <OutterWrapper>
             <FormWrapper>
                <img src={logo} alt="logo"/>
                <div className="login-wrapper">
-                  <Form>
+                  <Form onSubmit={handleSubmit(onSubmit)}>
                     <h5>REGISTER</h5>
                     <Form.Field>
                         <p>Names: </p>
-                        <input type='text' placeholder='Ex: Manila Keza' />
+                        <input {...register('Names',{required:'this is requered'})} type='text' placeholder='Ex: Manila Keza' />
 
                         {error &&
                             <Label basic color='red' pointing>
@@ -25,8 +30,8 @@ function Register(){
                    </Form.Field>
                    <Form.Field>
                         <p>Email: </p>
-                        <input type='text' placeholder='Ex: manila@mail.com' />
-
+                        <input {...register('Email',{required:'this is requered'})} type='text' placeholder='Ex: manila@mail.com' />
+)
                         {error &&
                             <Label basic color='red' pointing>
                                 Please enter a value
@@ -36,7 +41,7 @@ function Register(){
                    
                    <Form.Field>
                         <p>Password</p>
-                        <div class="ui icon input"><input type="password" placeholder="Password"/><i aria-hidden="true" class="eye slash icon"></i></div>
+                        <div class="ui icon input"><input {...register('password',{required:'this is requered'})} type="password" placeholder="Password"/><i aria-hidden="true" class="eye slash icon"></i></div>
                         {error &&
                             <Label basic color='red' pointing>
                                 Please enter a value
@@ -45,7 +50,7 @@ function Register(){
                     </Form.Field>
                     <Form.Field>
                         <p>Confirm password</p>
-                        <div class="ui icon input"><input type="password" placeholder="Password"/><i aria-hidden="true" class="eye slash icon"></i></div>
+                        <div class="ui icon input"><input {...register('Confirm password',{required:'this is requered'})} type="password" placeholder="Password"/><i aria-hidden="true" class="eye slash icon"></i></div>
                         {error &&
                             <Label basic color='red' pointing>
                                 Please enter a value
@@ -53,7 +58,7 @@ function Register(){
                         }
                     </Form.Field>
                     <div className="btn-login-wrapper"><button class="ui primary button"> Signup </button></div>
-                    <p className="p-center"><a href="/Login">Login</a> if you dont have an account</p>
+                    <p className="p-center"><a href="/">Login</a> if you dont have an account</p>
                   </Form>
                </div>
             </FormWrapper>
@@ -82,6 +87,7 @@ const FormWrapper = styled.div`
         height: auto;
         border-radius:10px; 
         text-align: left;
+        padding: 20px;
         p{
             margin:15px 0px 3px 0px;
         }

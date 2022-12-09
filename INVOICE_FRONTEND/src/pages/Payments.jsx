@@ -10,25 +10,25 @@ function Payments(){
     const data = [{
         id:1,
         Amount: 98099,
-        item: "Tanyasis Manyasi",
+        item: "Tanyasis Mayiana",
         
     },
     { 
         id:3,
         Amount: 98099,
-        item: "Tanyasis Manyasi",
+        item: "Tanyasis Mayiana",
         
     },
     {
         id:6,
         Amount: 98099,
-        item: "Tanyasis Manyasi",
+        item: "Tanyasis Mayiana",
         
     },
     { 
         id:8,
         Amount: 98099,
-        item: "Tanyasis Manyasi",
+        item: "Tanyasis Mayiana",
         
     }]
     const navigate = useNavigate();

@@ -11,7 +11,7 @@ function Home(){
     const data = [{
         id:1,
         number: 98099,
-        client: "Tanyasis Manyasi",
+        client: "Tanyasis Mayiana",
         amount: 400,
         date: "May 8,2022",
         status: "paid"
@@ -19,7 +19,7 @@ function Home(){
     { 
         id:2,
         number: 99,
-        client: "Tanyasis Manyasi2",
+        client: "Tanyasis Mayiana",
         amount: 400,
         date: "May 8,2022",
         status: "paid"
@@ -27,7 +27,7 @@ function Home(){
     {
         id:1,
         number: 98099,
-        client: "Tanyasis Manyasi",
+        client: "Tanyasis Mayiana",
         amount: 400,
         date: "May 8,2022",
         status: "paid"
@@ -35,7 +35,7 @@ function Home(){
     { 
         id:2,
         number: 99,
-        client: "Tanyasis Manyasi2",
+        client: "Tanyasis Mayiana",
         amount: 400,
         date: "May 8,2022",
         status: "paid"

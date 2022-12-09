@@ -5,9 +5,15 @@ import Navigation from "../components/Navigation";
 import {  Button, Header, Icon, Form, Modal } from 'semantic-ui-react'
 import ItemDetails from "../components/ItemDetails";
 import ViewInvoice from '../components/View_invoice';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+
 
 function InvoiceNew(){
     const [open, setOpen] = React.useState(false)
+    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    console.log(errors);
+    const onSubmit = data => console.log(data);
     
     return(
         <Navigation>
@@ -17,29 +23,29 @@ function InvoiceNew(){
            <div className="row">
                <div className="row-left">
                     <p>Seller</p>
-                    <input type='text' placeholder='Manila Keza' />
+                    <input {...register('seller',{required:'this is requered'})} type='text' placeholder='Manila Keza' />
                     <div className="row">
                       <div className="row-left">
                         <p>Bank</p>
-                        <input type='text' placeholder='Manila Keza' />
+                        <input {...register('bank',{required:'this is requered'})}type='text' placeholder='Manila Keza' />
                       </div>
                       <div className="row-right">
                         <p>Bank account</p>
-                        <input type='text' placeholder='Manila Keza' />
+                        <input {...register('bank account',{required:'this is requered'})} type='text' placeholder='Manila Keza' />
                       </div>
                     </div>
                </div>
                <div className="row-right">
                     <p>Client</p>
-                    <input type='text' placeholder='Manila Keza' />
+                    <input {...register('client',{required:'this is requered'})} type='text' placeholder='Manila Keza' />
                     <div className="row">
                       <div className="row-left">
                         <p>Invoice Date</p>
-                        <input type='text' placeholder='Manila Keza' />
+                        <input {...register('invoice date',{required:'this is requered'})}type='text' placeholder='Manila Keza' />
                       </div>
                       <div className="row-right">
                         <p>Due date</p>
-                        <input type='text' placeholder='Manila Keza' />
+                        <input {...register('due date',{required:'this is requered'})} type='text' placeholder='Manila Keza' />
                       </div>
                     </div>
                </div>

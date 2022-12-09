@@ -3,6 +3,8 @@ import logo from "../assets/images/logo.png";
 import { Route, useNavigate } from 'react-router-dom'
 import { Divider, Form, Label } from 'semantic-ui-react'
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+
 
 function Login(){
     const [error, setError] = useState(false);
@@ -11,24 +13,26 @@ function Login(){
     const handleClick = () => {
         navigate('/home')
     }
+    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const onSubmit = data => console.log(data);
 
     return(
         <OutterWrapper>
             <FormWrapper>
                <img src={logo} alt="logo"/>
                <div className="login-wrapper">
-                  <Form>
+                  <Form onSubmit={handleSubmit(onSubmit)}>
                     <Form.Field>
                     <h5>LOGIN</h5>
                     <p>Email</p>
-                    <input type='text' placeholder='Ex: manila@mail.com' />
+                    <input {...register('email',{required:'this is requered'})} type='text' placeholder='Ex: manila@mail.com' />
                     {error &&
                         <Label basic color='red' pointing>
                             Please enter a value
                         </Label>
                     }
                     <p>Password</p>
-                    <div class="ui icon input"><input type="password" placeholder="Password"/><i aria-hidden="true" class="eye slash icon"></i></div>
+                    <div class="ui icon input"><input {...register('password',{required:'this is requered'})} type="password" placeholder="Password"/><i aria-hidden="true" class="eye slash icon"></i></div>
                     {error &&
                         <Label basic color='red' pointing>
                             Please enter a value

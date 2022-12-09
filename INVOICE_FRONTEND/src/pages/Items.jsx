@@ -10,25 +10,25 @@ function Items(){
     const data = [{
         id:1,
         number: 98099,
-        name: "Tanyasis Manyasi",
+        name: "Tanyasis Mayiana",
         
     },
     { 
         id:3,
         number: 98099,
-        name: "Tanyasis Manyasi",
+        name: "Tanyasis Mayiana",
         
     },
     {
         id:6,
         number: 98099,
-        name: "Tanyasis Manyasi",
+        name: "Tanyasis Mayiana",
         
     },
     { 
         id:8,
         number: 98099,
-        name: "Tanyasis Manyasi",
+        name: "Tanyasis Mayiana",
         
     }]
     const navigate = useNavigate();
