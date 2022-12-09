@@ -2,14 +2,8 @@ import styled from "styled-components";
 import { useState } from "react";
 import Navigation from "../components/Navigation";
 import { Divider, Form, Label } from 'semantic-ui-react'
-import { useState } from "react";
-import { useForm } from "react-hook-form";
 
 function PaymentsNew(){
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
-  console.log(errors);
-  const onSubmit = data => console.log(data);
-  
     
     return(
         <Navigation>
@@ -19,12 +13,12 @@ function PaymentsNew(){
            <div className="row">
                <div className="row-left">
                     <p>Invoice number</p>
-                    <input {...register('seller',{required:'this is requered'})} type='text' placeholder='Manila Keza' />
+                    <input type='text' placeholder='Manila Keza' />
                     
                </div>
                <div className="row-right">
                     <p>Amount</p>
-                    <input {...register('seller',{required:'this is requered'})} type='text' placeholder='0.00' />
+                    <input type='text' placeholder='0.00' />
                    
                </div>
            </div>

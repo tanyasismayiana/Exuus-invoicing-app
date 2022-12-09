@@ -2,15 +2,9 @@ import styled from "styled-components";
 import { useState } from "react";
 import Navigation from "../components/Navigation";
 import { Divider, Form, Label } from 'semantic-ui-react'
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-
 
 function ItemsNew(){
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
-  console.log(errors);
-  const onSubmit = data => console.log(data);
-     
+    
     return(
         <Navigation>
            <InnerForm>
@@ -19,12 +13,12 @@ function ItemsNew(){
            <div className="row">
                <div className="row-left">
                     <p>Item number</p>
-                    <input {...register('seller',{required:'this is requered'})} type='text' placeholder='Manila Keza' />
+                    <input type='text' placeholder='Manila Keza' />
                     
                </div>
                <div className="row-right">
                     <p>Item name</p>
-                    <input {...register('seller',{required:'this is requered'})} type='text' placeholder='Manila Keza' />
+                    <input type='text' placeholder='Manila Keza' />
                    
                </div>
            </div>
