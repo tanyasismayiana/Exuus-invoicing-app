@@ -1,39 +1,61 @@
 import styled from "styled-components";
 import { useState } from "react";
 import Navigation from "../components/Navigation";
-import { Divider, Form, Label } from 'semantic-ui-react'
+import { Form, Label } from 'semantic-ui-react';
+import { useForm } from "react-hook-form";
+import { useNavigate } from 'react-router-dom';
+
 
 function ClientNew(){
+  const navigate = useNavigate();
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+
+  const onSubmit = data => {
+    fetch(process.env.REACT_APP_API_URL + "/clients/post-client", {
+      method: 'POST',
+      headers: new Headers({
+                'Content-Type': 'application/json', 
+        }),
+      body: JSON.stringify(data)
+    })
+    .then((response) => response.json())
+    .then(() => {
+      navigate('/clients')
+    })
+    .catch((error) => {
+        console.error(error);
+    });
+  }
     
     return(
         <Navigation>
            <InnerForm>
            <h4>New Client</h4>
-           <Form>
+           <Form onSubmit={handleSubmit(onSubmit)}>
            <div className="row">
                <div className="row-left">
-                    <p>Seller</p>
-                    <input type='text' placeholder='Manila Keza' />
-                    
+                    <p>Client number</p>
+                    <input type='text' {...register("number", { required: true })} />
+                    {errors.number &&
+                        <Label basic color='red' pointing>
+                            Please enter a value
+                        </Label>
+                    }
                </div>
                <div className="row-right">
-                    <p>Client</p>
-                    <input type='text' placeholder='Manila Keza' />
-                   
+                    <p>Client name</p>
+                    <input type='text' {...register("name", { required: true })} />
+                    {errors.number &&
+                        <Label basic color='red' pointing>
+                            Please enter a value
+                        </Label>
+                    }
                </div>
            </div>
-
-               <div className="row">
-                   <div className="row-left">
-                       <p>Notes</p>
-                       <textarea placeholder="More details" rows="3"></textarea>
-                   </div>
-                  
-               </div>
                <br/>
                <div className="row">
                     <div className="row-left">
-                      <button class="ui primary button">Save</button> <button class="ui primary button">View</button>
+                      <button type="submit" className="ui primary button">Save</button> 
                     </div>
                 </div>
            </Form>

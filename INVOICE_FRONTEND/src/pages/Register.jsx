@@ -1,15 +1,37 @@
 import styled from "styled-components";
 import logo from "../assets/images/logo.png";
-import { Divider, Form, Label } from 'semantic-ui-react'
+import { Form, Label } from 'semantic-ui-react'
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { setItem } from "../utils/Storage";
+import { useNavigate } from 'react-router-dom'
 
 
 function Register(){
     const [error, setError] = useState(false);
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
-    console.log(errors);
-    const onSubmit = data => console.log(data);
+    const navigate = useNavigate();
+   
+    const onSubmit = data => {
+        fetch(process.env.REACT_APP_API_URL + "/users/register", {
+            method: 'POST',
+            headers: new Headers({
+                      'Content-Type': 'application/json', 
+              }),
+            body: JSON.stringify(data)
+        })
+        .then((response) => response.json())
+        .then((responseData) => {
+            console.log(responseData);
+            if(responseData.token){
+                setItem("user", responseData);
+                navigate('/home')
+            }
+        })
+        .catch((error) => {
+              console.error(error.message);
+        });
+    }
 
     return(
         <OutterWrapper>
@@ -18,31 +40,27 @@ function Register(){
                <div className="login-wrapper">
                   <Form onSubmit={handleSubmit(onSubmit)}>
                     <h5>REGISTER</h5>
-                    <Form.Field>
-                        <p>Names: </p>
-                        <input {...register('Names',{required:'this is requered'})} type='text' placeholder='Ex: Manila Keza' />
+                    <p>Names: </p>
+                    <input {...register('name',{required:'this is requered'})} type='text' placeholder='Ex: Manila Keza' />
 
-                        {error &&
+                        {errors.name &&
                             <Label basic color='red' pointing>
                                 Please enter a value
                             </Label>
                         }
-                   </Form.Field>
-                   <Form.Field>
                         <p>Email: </p>
-                        <input {...register('Email',{required:'this is requered'})} type='text' placeholder='Ex: manila@mail.com' />
-)
-                        {error &&
+                        <input {...register('email',{required:'this is requered'})} type='text' placeholder='Ex: manila@mail.com' />
+
+                        {errors.email &&
                             <Label basic color='red' pointing>
                                 Please enter a value
                             </Label>
                         }
-                   </Form.Field>
                    
                    <Form.Field>
                         <p>Password</p>
-                        <div class="ui icon input"><input {...register('password',{required:'this is requered'})} type="password" placeholder="Password"/><i aria-hidden="true" class="eye slash icon"></i></div>
-                        {error &&
+                        <div className="ui icon input"><input {...register('password',{required:'this is requered'})} type="password" placeholder="Password"/><i aria-hidden="true" className="eye slash icon"></i></div>
+                        {errors.password &&
                             <Label basic color='red' pointing>
                                 Please enter a value
                             </Label>
@@ -50,14 +68,14 @@ function Register(){
                     </Form.Field>
                     <Form.Field>
                         <p>Confirm password</p>
-                        <div class="ui icon input"><input {...register('Confirm password',{required:'this is requered'})} type="password" placeholder="Password"/><i aria-hidden="true" class="eye slash icon"></i></div>
-                        {error &&
+                        <div className="ui icon input"><input {...register('confirmPassword',{required:'this is requered'})} type="password" placeholder="Password"/><i aria-hidden="true" className="eye slash icon"></i></div>
+                        {errors.confirmPassword &&
                             <Label basic color='red' pointing>
                                 Please enter a value
                             </Label>
                         }
                     </Form.Field>
-                    <div className="btn-login-wrapper"><button class="ui primary button"> Signup </button></div>
+                    <div className="btn-login-wrapper"><button className="ui primary button"> Signup </button></div>
                     <p className="p-center"><a href="/">Login</a> if you dont have an account</p>
                   </Form>
                </div>

@@ -4,6 +4,9 @@ import express from 'express';
 
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
+const cors = require('cors');
+
+const dotenv = require('dotenv').config()
 
 import logging from './config/logging';
 import config from './config/config';
@@ -15,6 +18,7 @@ import paymentRoutes from './routes/payment.routes';
 
 const NAMESPACE = 'Server';
 const router = express();
+router.use(cors());
 
 /** Log the requests */
 router.use((req, res, next) => {
@@ -28,18 +32,6 @@ router.use((req, res, next) => {
 /** Parse the body of the request */
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
-
-/** API rules */
-router.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-
-    if (req.method == 'OPTIONS') {
-        res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
-        return res.status(200).json({});
-    }
-    next();
-});
 
 /** App routes */
 router.use('/api/users', userRoutes);

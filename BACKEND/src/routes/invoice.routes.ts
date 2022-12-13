@@ -1,9 +1,11 @@
 import { Router, Request, Response } from 'express';
-import invoiceController from '../controllers/invoice.controller';
+import InvoiceController from '../controllers/invoice.controller';
 
 const router = Router();
 
-// GET - Invoice
-router.get('/', invoiceController.getInvoice);
+// GET - invoice
+router.get('/', InvoiceController.getInvoice);
+// POST - invoice
+router.post('/post-invoice', InvoiceController.saveInvoice);
 
 export default router;

@@ -18,7 +18,7 @@ CREATE TABLE "public"."clients" (
      "id" integer DEFAULT nextval('client_id_seq') NOT NULL,
      "number" character varying(255) NOT NULL,
      "name"  character varying(255) NOT NULL,
-     "deleted" BOOLEAN NOT NULL,
+     "deleted" BOOLEAN,
      "created_at" TIMESTAMP DEFAULT NOW(),
      "updated_at" TIMESTAMP DEFAULT NOW()
 ) WITH (oids = false);
@@ -27,7 +27,8 @@ CREATE TABLE "public"."items" (
      "id" integer DEFAULT nextval('items_id_seq') NOT NULL,
      "number" character varying(255) NOT NULL,
      "name"  character varying(255) NOT NULL,
-     "deleted" BOOLEAN NOT NULL,
+     "deleted" BOOLEAN,
+     "notes" text,
      "created_at" TIMESTAMP DEFAULT NOW(),
      "updated_at" TIMESTAMP DEFAULT NOW()
 ) WITH (oids = false);

@@ -7,8 +7,8 @@ import { Input } from 'semantic-ui-react'
 function Profile() {
   return (
     <ProfileWrapper>
-        <p> <i aria-hidden="true" class="caret down icon"></i> Manila Keza</p>    
-        <p> <i aria-hidden="true" class="caret down icon"></i> Settings</p>
+        <p> <i aria-hidden="true" className="caret down icon"></i> Manila Keza</p>    
+        <p> <i aria-hidden="true" className="caret down icon"></i> Settings</p>
     </ProfileWrapper>
   );
 }

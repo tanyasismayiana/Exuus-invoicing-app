@@ -26,7 +26,7 @@ export const ClientMap = (sequelize: Sequelize) => {
             },
             deleted: {
                 type: DataTypes.BOOLEAN,
-                allowNull: false
+                allowNull: true
             },
             createdAt: {
                 type: DataTypes.DATE,

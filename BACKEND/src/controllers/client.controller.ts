@@ -8,4 +8,12 @@ const getClients = async (req: Request, res: Response, next: NextFunction) => {
     res.status(200).json({ clients: result });
 };
 
-export default { getClients };
+const saveClient = async (req: Request, res: Response, next: NextFunction) => {
+    let newItem = req.body as Client;
+    ClientMap(database);
+    const result = await Client.create({ ...newItem });
+    newItem = result.dataValues as Client;
+    res.status(201).json({ user: newItem });
+};
+
+export default { getClients, saveClient };

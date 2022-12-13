@@ -7,5 +7,20 @@ const getPayment = async (req: Request, res: Response, next: NextFunction) => {
     const result = await Payment.findAll();
     res.status(200).json({ payments: result });
 };
+const savePayments = async (req: Request, res: Response, next: NextFunction) => {
+    let newItem = req.body as Payment;
+    PaymentMap(database);
+    const result = await Payment.create({ ...newItem });
+    newItem = result.dataValues as Payment;
+    res.status(201).json({ user: newItem });
+};
 
-export default { getPayment };
+const deletePayment  = async (req: Request, res: Response, next: NextFunction) => {
+    let newItem = req.body as Payment;
+    console.log("---" + JSON.stringify(req.body));
+    PaymentMap(database);
+    const result = await Payment.create({ ...newItem });
+    newItem = result.dataValues as Payment;
+    res.status(201).json({ user: newItem });
+};
+export default { getPayment, savePayments,deletePayment };

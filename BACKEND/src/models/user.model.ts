@@ -2,7 +2,7 @@ import { Model, Sequelize, DataTypes } from 'sequelize';
 
 export default class User extends Model {
     public id?: number;
-    public username!: string;
+    public name!: string;
     public email?: Date;
     public password?: string;
     public createdAt?: Date;
@@ -17,7 +17,7 @@ export const UserMap = (sequelize: Sequelize) => {
                 autoIncrement: true,
                 primaryKey: true
             },
-            username: {
+            name: {
                 type: DataTypes.STRING(255),
                 field: 'user_name'
             },

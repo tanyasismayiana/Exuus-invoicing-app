@@ -16,13 +16,10 @@ router.get('/:id', async (req: Request, res: Response) => {
     res.status(200).json({ user: result });
 });
 
-// POST - users
-router.post('/', async (req: Request, res: Response) => {
-    let newUser = req.body as User;
-    UserMap(database);
-    const result = await User.create({ ...newUser });
-    newUser = result.dataValues as User;
-    res.status(201).json({ user: newUser });
-});
+// Register - users
+router.post('/register', userController.registerUser);
+
+// Login - users
+router.post('/login', userController.loginUser);
 
 export default router;

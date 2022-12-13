@@ -5,5 +5,7 @@ const router = Router();
 
 // GET - clients
 router.get('/', clientController.getClients);
+// POST - items
+router.post('/post-client', clientController.saveClient);
 
 export default router;
