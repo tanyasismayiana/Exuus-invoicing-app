@@ -1,49 +1,33 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navigation from "../components/Navigation";
 import TableRow from "../components/TableRow";
 import { Route, useNavigate } from 'react-router-dom'
 
 function Home(){
     const [error, setError] = useState(false);
-    const navigate = useNavigate();
-    
-    const data = [{
-        id:1,
-        number: 98099,
-        client: "Tanyasis Mayiana",
-        amount: 400,
-        date: "May 8,2022",
-        status: "paid"
-    },
-    { 
-        id:2,
-        number: 99,
-        client: "Tanyasis Mayiana",
-        amount: 400,
-        date: "May 8,2022",
-        status: "paid"
-    },
-    {
-        id:1,
-        number: 98099,
-        client: "Tanyasis Mayiana",
-        amount: 400,
-        date: "May 8,2022",
-        status: "paid"
-    },
-    { 
-        id:2,
-        number: 99,
-        client: "Tanyasis Mayiana",
-        amount: 400,
-        date: "May 8,2022",
-        status: "paid"
-    }]
+    const [loading, setLoading] = useState(true);
+    const [data, setData] = useState([]);
 
+    const navigate = useNavigate();
     const handleClick = () => {
         navigate('/create-invoice')
     }
+
+    const fetchItems = () => {
+      fetch(process.env.REACT_APP_API_URL + "/invoices")
+      .then(res => res.json())
+      .then((items) => {
+        console.log(items)
+        setLoading(false);
+        setData(items.invoices)}
+      ).catch(error => {
+        console.log(error);
+      })}
+
+    useEffect(() => {
+      fetchItems()
+    }, []);
 
     return(
         
@@ -51,7 +35,7 @@ function Home(){
             <TableHeader>
                <div className="top-wrapper">
                    <h4>Invoices</h4>
-                   <button onClick={handleClick} class="ui primary button">New Invoices <i aria-hidden="true" class="right add icon"></i></button>
+                   <button onClick={handleClick} className="ui primary button">New Invoices <i aria-hidden="true" className="right add icon"></i></button>
                </div>
                <table>
                   <thead>
@@ -65,11 +49,23 @@ function Home(){
                     </tr>
                   </thead>
                   <tbody>
-                    {data.map((item, i)=>{
-                        return(
-                          <TableRow invoice = {item}/>
-                        )
-                    })}
+                    {loading ?
+                    <tr><td colSpan={3}><div className="ui active centered inline loader"></div></td></tr>
+                      :
+                      <>
+                        {data.length > 0 ?
+                        <>
+                        {data.map((item, i)=>{
+                            return(
+                              <TableRow invoice = {item}/>
+                            )
+                        })}
+                        </>
+                        :
+                        <tr><td colSpan={3}>No Data</td></tr>
+                        }
+                      </>
+                    }
                   </tbody>
                </table>
             </TableHeader>
@@ -95,11 +91,11 @@ const TableHeader = styled.section`
     color:white;
   }
   table tbody tr td{
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #f1f1f1;
     padding:8px;
   }
   table tbody tr:hover td{
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #f1f1f1;
     padding:8px;
     background-color:#DCDFE1;
   }

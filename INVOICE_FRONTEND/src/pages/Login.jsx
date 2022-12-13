@@ -4,17 +4,37 @@ import { Route, useNavigate } from 'react-router-dom'
 import { Divider, Form, Label } from 'semantic-ui-react'
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { setItem } from "../utils/Storage";
 
 
 function Login(){
-    const [error, setError] = useState(false);
+    const [error, setError] = useState(true);
     const navigate = useNavigate();
 
     const handleClick = () => {
         navigate('/home')
     }
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
-    const onSubmit = data => console.log(data);
+    const onSubmit = data => {
+        fetch(process.env.REACT_APP_API_URL + "/users/login", {
+            method: 'POST',
+            headers: new Headers({
+                      'Content-Type': 'application/json', 
+              }),
+            body: JSON.stringify(data)
+        })
+        .then((response) => response.json())
+        .then((responseData) => {
+            console.log(responseData);
+            if(responseData.token){
+                setItem("user", responseData);
+                navigate('/home')
+            }
+        })
+        .catch((error) => {
+              console.error(error.message);
+        });
+    }
 
     return(
         <OutterWrapper>
@@ -22,24 +42,25 @@ function Login(){
                <img src={logo} alt="logo"/>
                <div className="login-wrapper">
                   <Form onSubmit={handleSubmit(onSubmit)}>
-                    <Form.Field>
+                   
                     <h5>LOGIN</h5>
                     <p>Email</p>
                     <input {...register('email',{required:'this is requered'})} type='text' placeholder='Ex: manila@mail.com' />
-                    {error &&
+                    {errors.email &&
                         <Label basic color='red' pointing>
                             Please enter a value
                         </Label>
                     }
+                    <Form.Field>
                     <p>Password</p>
                     <div class="ui icon input"><input {...register('password',{required:'this is requered'})} type="password" placeholder="Password"/><i aria-hidden="true" class="eye slash icon"></i></div>
-                    {error &&
+                    {errors.password &&
                         <Label basic color='red' pointing>
                             Please enter a value
                         </Label>
                     }
                     </Form.Field>
-                    <div className="btn-login-wrapper"><button class="ui primary button" onClick={()=>handleClick()}> Login </button></div>
+                    <div className="btn-login-wrapper"><button type="submit" class="ui primary button"> Login </button></div>
                     <p className="p-center"><a href="/register">Sign up</a> if you dont have an account</p>
                   </Form>
                </div>

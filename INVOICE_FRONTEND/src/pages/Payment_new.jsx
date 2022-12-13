@@ -2,30 +2,57 @@ import styled from "styled-components";
 import { useState } from "react";
 import Navigation from "../components/Navigation";
 import { Divider, Form, Label } from 'semantic-ui-react'
-import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from 'react-router-dom';
+
 
 function PaymentsNew(){
+  const navigate = useNavigate();
+  const [invoices, setInvoice] = useState([]);
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
-  console.log(errors);
-  const onSubmit = data => console.log(data);
-  
+
+  const onSubmit = data => {
+    fetch(process.env.REACT_APP_API_URL + "/payments/post-payments", {
+      method: 'POST',
+      headers: new Headers({
+                'Content-Type': 'application/json', 
+        }),
+      body: JSON.stringify(data)
+    })
+    .then((response) => response.json())
+    .then(() => {
+      navigate('/payments')
+    })
+    .catch((error) => {
+        console.error(error);
+    });
+  }
     
     return(
         <Navigation>
            <InnerForm>
            <h4>New payments</h4>
-           <Form>
+           <Form onSubmit={handleSubmit(onSubmit)}>
            <div className="row">
                <div className="row-left">
                     <p>Invoice number</p>
-                    <input {...register('seller',{required:'this is requered'})} type='text' placeholder='Manila Keza' />
-                    
+                    <select name='' {...register("payments", { required: true })}>
+                                <option>select invoice number...</option>
+                          {invoices?.map((client,i)=>{
+                                return(
+                                 <option key={i} value={client.id}>{client.name}</option>
+                              )
+                            })}
+                         </select>
                </div>
                <div className="row-right">
                     <p>Amount</p>
-                    <input {...register('seller',{required:'this is requered'})} type='text' placeholder='0.00' />
-                   
+                    <input type='text'{...register("number", { required: true })}/>
+                    {errors.number &&
+                        <Label basic color='red' pointing>
+                            Please enter a value
+                        </Label>
+                    }
                </div>
            </div>
 
@@ -39,7 +66,7 @@ function PaymentsNew(){
                <br/>
                <div className="row">
                     <div className="row-left">
-                      <button class="ui primary button">Save</button> <button class="ui primary button">View</button>
+                      <button type="submit" class="ui primary button">Save</button> 
                     </div>
                 </div>
            </Form>

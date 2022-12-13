@@ -1,55 +1,103 @@
 import React from 'react'
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navigation from "../components/Navigation";
-import {  Button, Header, Icon, Form, Modal } from 'semantic-ui-react'
+import {  Button, Input, Form, Modal } from 'semantic-ui-react'
 import ItemDetails from "../components/ItemDetails";
 import ViewInvoice from '../components/View_invoice';
-import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from 'react-router-dom';
 
 
 function InvoiceNew(){
-    const [open, setOpen] = React.useState(false)
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
-    console.log(errors);
-    const onSubmit = data => console.log(data);
-    
-    return(
+
+  const [open, setOpen] = useState(false)
+  const [clients, setClients] = useState([])
+  const [numberOfItems, setNumberOfItems] = useState(1)
+
+  const navigate = useNavigate();
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+
+  const onSubmit = data => {
+    fetch(process.env.REACT_APP_API_URL + "/invoices/post-invoice", {
+      method: 'POST',
+      headers: new Headers({
+                'Content-Type': 'application/json', 
+        }),
+      body: JSON.stringify(data)
+    })
+    .then((response) => response.json())
+    .then(() => {
+      navigate('/invoices')
+    })
+    .catch((error) => {
+        console.error(error);
+    });
+  }
+
+  const fetchClients = () => {
+    fetch(process.env.REACT_APP_API_URL + "/clients")
+    .then(res => res.json())
+    .then((items) => {
+      setClients(items.clients)}
+    ).catch(error => {
+      console.log(error);
+    })}
+
+  useEffect(() => {
+    fetchClients();
+  }, []);
+
+  let createItems = (number) => {
+    var elements = [];
+    for(let i = 0; i < number; i++){
+        elements.push(<ItemDetails key={i}/>);
+    }
+    return elements;
+  }
+  
+
+  return(
         <Navigation>
            <InnerForm>
            <h4>New Invoice</h4>
-           <Form>
+           <Form onSubmit={handleSubmit(onSubmit)}>
            <div className="row">
-               <div className="row-left">
-                    <p>Seller</p>
-                    <input {...register('seller',{required:'this is requered'})} type='text' placeholder='Manila Keza' />
+                  
                     <div className="row">
-                      <div className="row-left">
-                        <p>Bank</p>
-                        <input {...register('bank',{required:'this is requered'})}type='text' placeholder='Manila Keza' />
+                      <div className='row-third'>
+                        <p>Client</p>
+                         <select name='' {...register("client", { required: true })}>
+                                <option>Choose client...</option>
+                          {clients.map((client,i)=>{
+                                return(
+                                 <option key={i} value={client.id}>{client.name}</option>
+                              )
+                            })}
+                         </select>
+                       
                       </div>
-                      <div className="row-right">
-                        <p>Bank account</p>
-                        <input {...register('bank account',{required:'this is requered'})} type='text' placeholder='Manila Keza' />
-                      </div>
-                    </div>
-               </div>
-               <div className="row-right">
-                    <p>Client</p>
-                    <input {...register('client',{required:'this is requered'})} type='text' placeholder='Manila Keza' />
-                    <div className="row">
-                      <div className="row-left">
+                      <div className='row-third'>
                         <p>Invoice Date</p>
-                        <input {...register('invoice date',{required:'this is requered'})}type='text' placeholder='Manila Keza' />
+                        <input  type='date' {...register("invoiceDate", { required: true })} />
                       </div>
-                      <div className="row-right">
+                      <div className='row-third'>
                         <p>Due date</p>
-                        <input {...register('due date',{required:'this is requered'})} type='text' placeholder='Manila Keza' />
+                        <input  type='date' {...register("dueDate", { required: true })} />
                       </div>
                     </div>
-               </div>
+            
            </div>
+           <div className='row'>
+                         <div className='row-left'>
+                            <p>Bank account</p>
+                            <input  type='text' {...register("number", { required: true })} />
+                         </div>
+                         <div className='row-left'>
+                          <p>Bank</p>
+                          <input  type='text' {...register("number", { required: true })} />
+                         </div>
+                    </div>
            <table>
                   <thead>
                     <tr>
@@ -60,13 +108,12 @@ function InvoiceNew(){
                     </tr>
                   </thead>
                   <tbody>
-                     <ItemDetails/>
-                     <ItemDetails/>
+                      {createItems(numberOfItems)}
                   </tbody>
                </table>
                <br/>
                <div className="row mx-3">
-                  <button class="ui primary button">New Item <i aria-hidden="true" class="right add icon"></i></button>
+                  <button type='button' onClick={()=>setNumberOfItems(numberOfItems+1)} className="ui primary button">New Item <i aria-hidden="true" className="right add icon"></i></button>
                   <p>Total: 6,000.00</p>
                </div>
 
@@ -80,7 +127,7 @@ function InvoiceNew(){
                <br/>
                <div className="row">
                     <div className="row-left">
-                      <button class="ui primary button">Save</button> <button onClick={() => setOpen(true)} class="ui primary button">View</button>
+                      <button type='submit' className="ui primary button">Save</button> <button onClick={() => setOpen(true)} className="ui primary button">View</button>
                     </div>
                 </div>
            </Form>
@@ -96,7 +143,7 @@ function InvoiceNew(){
                     <ViewInvoice/>
                 </Modal.Content>
                 <HangingBtnsWrapper>
-                    <Button class="ui primary button">Download</Button><Button class="ui primary button">Print</Button>
+                    <Button className="ui primary button">Download</Button><Button className="ui primary button">Print</Button>
                 </HangingBtnsWrapper>
             </Modal>
 
@@ -118,6 +165,9 @@ const InnerForm = styled.section`
   }
   .row-right{
     width:49%;
+  }
+  .row-third{
+    width:33%;
   }
   p{
     margin:15px 0px 0px 0px;

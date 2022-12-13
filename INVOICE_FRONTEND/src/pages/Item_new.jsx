@@ -1,45 +1,79 @@
 import styled from "styled-components";
 import { useState } from "react";
 import Navigation from "../components/Navigation";
-import { Divider, Form, Label } from 'semantic-ui-react'
-import { useState } from "react";
+import { Form, Label } from 'semantic-ui-react';
 import { useForm } from "react-hook-form";
-
+import { useNavigate } from 'react-router-dom';
 
 function ItemsNew(){
+  
+  const navigate = useNavigate();
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
-  console.log(errors);
-  const onSubmit = data => console.log(data);
-     
+
+  const onSubmit = data => {
+    fetch(process.env.REACT_APP_API_URL + "/items/post-item", {
+      method: 'POST',
+      headers: new Headers({
+                'Content-Type': 'application/json', 
+        }),
+      body: JSON.stringify(data)
+    })
+    .then((response) => response.json())
+    .then(() => {
+      navigate('/items')
+    })
+    .catch((error) => {
+        console.error(error);
+    });
+  }
+ 
     return(
         <Navigation>
            <InnerForm>
            <h4>New Items</h4>
-           <Form>
+           <Form  onSubmit={handleSubmit(onSubmit)}>
            <div className="row">
                <div className="row-left">
                     <p>Item number</p>
-                    <input {...register('seller',{required:'this is requered'})} type='text' placeholder='Manila Keza' />
-                    
+                    <input type='text' {...register("number", { required: true })}/>
+                    {errors.number &&
+                        <Label basic color='red' pointing>
+                            Please enter a value
+                        </Label>
+                    }
                </div>
                <div className="row-right">
                     <p>Item name</p>
-                    <input {...register('seller',{required:'this is requered'})} type='text' placeholder='Manila Keza' />
-                   
+                    <input type='text' {...register("name", { required: true })}/>
+                    {errors.name &&
+                        <Label basic color='red' pointing>
+                            Please enter a value
+                        </Label>
+                    }
                </div>
            </div>
 
-               <div className="row">
+                <div className="row">
+                    <div className="row-left">
+                    <p>Unit cost</p>
+                    <input type='text' {...register("cost", { required: true })}/>
+                    {errors.name &&
+                        <Label basic color='red' pointing>
+                            Please enter a value
+                        </Label>
+                    }
+                    </div>
+              
                    <div className="row-left">
                        <p>Notes</p>
-                       <textarea placeholder="More details" rows="3"></textarea>
+                       <textarea placeholder="More details" rows="7" {...register("notes")}></textarea>
                    </div>
                   
                </div>
                <br/>
                <div className="row">
                     <div className="row-left">
-                      <button class="ui primary button">Save</button> <button class="ui primary button">View</button>
+                      <button type="submit" className="ui primary button">Save</button>
                     </div>
                 </div>
            </Form>

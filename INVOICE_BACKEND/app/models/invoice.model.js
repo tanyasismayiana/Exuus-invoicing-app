@@ -1,34 +1,31 @@
 module.exports = (sequelize, DataTypes) => {
     const Invoice = sequelize.define(
-      "Invoice",
+      "invoices",
       {
-        title: {
-          type: DataTypes.STRING,
-          allowNull: false,
+        id: {
+          type: DataTypes.INTEGER
         },
-        description: {
-          type: DataTypes.STRING,
-        },
-        owner: {
-          type: DataTypes.BIGINT,
-        },
-        status: {
+        number: {
           type: DataTypes.STRING,
         },
-        hoursOfWork: {
+        client_id: {
+          type: DataTypes.INTEGER,
+        },
+        item_id: {
           type: DataTypes.STRING,
+        },
+        amount: {
+          type: DataTypes.DOUBLE,
           allowNull: false,
         },
-        rate: {
-          type: DataTypes.BIGINT,
-          allowNull: false,
+        payment_status: {
+          type: DataTypes.STRING
         },
-        totalAmount: {
-          type: DataTypes.BIGINT,
-          allowNull: false,
-        },
+        notes: {
+          type: DataTypes.STRING
+        }
       },
-      { tableName: "invoice", timestamps: true }
+      { tableName: "invoices", timestamps: true }
     );
     return Invoice
     }
